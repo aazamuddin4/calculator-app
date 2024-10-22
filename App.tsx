@@ -1,118 +1,104 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const CalculatorApp = () => {
+  const [firstNumber, setFirstNumber] = useState<string>('');
+  const [secondNumber, setSecondNumber] = useState<string>('');
+  const [total, setTotal] = useState<number | null>(null);
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+  const handleAdd = () => {
+    if (!firstNumber || !secondNumber) {
+      Alert.alert(
+        "Input Required",
+        "Please enter both numbers to calculate the sum."
+      );
+      return;
+    }
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    const sum = parseFloat(firstNumber) + parseFloat(secondNumber);
+    setTotal(sum);
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.wrapper}>
+        <Text style={styles.heading}>Adding Two Numbers</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="First Number"
+          keyboardType="numeric"
+          value={firstNumber}
+          onChangeText={setFirstNumber}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Second Number"
+          keyboardType="numeric"
+          value={secondNumber}
+          onChangeText={setSecondNumber}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleAdd}>
+          <Text style={styles.buttonText}>
+            Add Two Numbers
+          </Text>
+        </TouchableOpacity>
+        <Text style={styles.resultText}>
+          {total !== null ? `Total: ${total}` : 'Total:'}
+        </Text>
+      </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  sectionTitle: {
+  wrapper: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 10,
+  },
+  heading: {
     fontSize: 24,
-    fontWeight: '600',
+    marginBottom: 20,
+    textAlign: 'center',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 5,
   },
-  highlight: {
-    fontWeight: '700',
+  resultText: {
+    marginTop: 20,
+    fontSize: 20,
+    textAlign: 'center',
   },
+  button: {
+    borderColor: 'blue',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10
+  },
+  buttonText: {
+    fontSize: 14,
+    color: 'blue',
+    textAlign: 'center'
+  }
 });
 
-export default App;
+export default CalculatorApp
